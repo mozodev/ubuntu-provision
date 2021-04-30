@@ -1,0 +1,49 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+<% project_code = File.basename(Dir.getwd)
+box_code = "ubuntu/focal64"
+box_code = box_name unless box_name == "base"
+script_path = "~/Drive/provision/ubuntu"
+env_source =  File.expand_path(script_path + "/env.example")
+env_destination = File.expand_path(Dir.getwd) + "/.env" -%>
+
+Vagrant.configure("2") do |config|
+
+  config.vm.define "<%= project_code %>" do |node|
+    node.vm.box = "<%= box_code %>"
+    node.vm.hostname = "<%= project_code %>"
+    node.vm.network "private_network", ip: "192.168.61.10"
+    node.vm.provider "virtualbox" do |vb|
+      vb.name = "<%= project_code %>"
+      vb.cpus = 1
+      vb.memory = 1024
+    end
+
+    node.vm.provision "file", source: "~/.gitconfig", destination: ".gitconfig"
+    node.vm.provision "file", source: "~/.ssh/id_rsa", destination: ".ssh/"
+    node.vm.provision "file", source: "~/.ssh/id_rsa.pub", destination: ".ssh/"
+    <% if File.file?(env_source) %>
+    # <%= env_source %>
+    node.vm.provision "file", source: "./.env", destination: ".env"
+    <% if File.file?(env_destination) %>
+      <% open(env_destination, 'a') { |f| f << "\n# #{env_destination}\n" + File.read(env_source) } %>
+    <% else %>
+      <% source = File.open(env_source) {|f| f.read() }
+      output = File.open(env_destination, 'w') {|f| f.write(source) } %>
+    <% end %>
+    <% end %>
+    node.vm.provision "shell", path: "<%= script_path %>/bootstrap.sh"
+    node.vm.provision "shell", path: "<%= script_path %>/vagrant.sh", privileged: false
+    <% if %w(php rbenv java).include? ENV["LANG"] %>
+    node.vm.provision "shell", path: "<%= script_path %>/<%= ENV["LANG"] %>.sh", privileged: false
+    node.vm.provision "shell", path: "<%= script_path %>/nodejs.sh", privileged: false
+    <% end %>
+    <% if %w(mariadb mysql postgresql).include? ENV["DB"] %>
+    node.vm.provision "shell", path: "<%= script_path %>/<%= ENV["DB"] %>.sh", privileged: false
+    <% end %>
+    <% if %w(drupal wp rails hugo).include? ENV["APP"] %>
+    node.vm.provision "shell", path: "<%= script_path %>/<%= ENV["APP"] %>.sh", privileged: false
+    <% end %>
+  end
+
+end

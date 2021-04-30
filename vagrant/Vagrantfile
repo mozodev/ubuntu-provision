@@ -1,0 +1,24 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+
+  config.vbguest.auto_update = false
+
+  config.vm.define "search" do |node|
+    node.vm.box = "ubuntu/focal64"
+    node.vm.network "private_network", ip: "192.168.61.10"
+    node.vm.synced_folder ".", "/vagrant", type: "nfs"
+    node.vm.provider "virtualbox" do |vb|
+      vb.name = "focal64"
+      vb.cpus = 1
+      vb.memory = 1024
+    end
+
+    node.vm.provision "file", source: "~/.gitconfig", destination: ".gitconfig"
+    node.vm.provision "file", source: "~/.ssh/id_rsa", destination: ".ssh/id_rsa"
+    node.vm.provision "file", source: "./.env", destination: ".env"
+    node.vm.provision "shell", path: "bootstrap.sh"
+  end
+
+end
