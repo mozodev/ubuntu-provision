@@ -1,0 +1,21 @@
+---
+#cloud-config
+ssh_import_id:
+  - gh:{{ github_username }}
+runcmd:
+  - |
+    cat << 'EOF' >> /home/ubuntu/.env
+    PHP_VERSION=8.0
+    PROJECT_CODE={{ v1.instance_id }}
+    EOF
+  - chown ubuntu:ubuntu /home/ubuntu/.env
+  # bootstrap
+  - sudo -u ubuntu -H -i bash -c 'curl -sSL https://git.io/J3yLS | bash'
+  # LANG:php
+  - sudo -u ubuntu -H -i bash -c 'curl -sSL https://git.io/J3MVp | bash'
+  # LANG:nodejs
+  - sudo -u ubuntu -H -i bash -c 'curl -sSL https://git.io/J3MoH | bash'
+  # DB:mariadb
+  - sudo -u ubuntu -H -i bash -c 'curl -sSL https://git.io/J3MKe | bash'
+  # APP:drupal
+  - sudo -u ubuntu -H -i bash -c 'curl -sSL https://git.io/J3MKt | bash'
