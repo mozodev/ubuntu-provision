@@ -8,7 +8,7 @@ PHP_VERSION=${PHP_VERSION:-8.0}
 ALLOWED_PHP_VERSIONS=('5.6', '7.0','7.1', '7.2', '7.3', '7.4', '8.0')
 
 PROJECT_CODE=${PROJECT_CODE:-}
-PROJECT_ENV=${PROJECT_ENV:}
+PROJECT_ENV=${PROJECT_ENV:-}
 [ ! -z $PROJECT_CODE ] && sudo mkdir -p /var/www/$PROJECT_CODE/web
 
 PHP_UPLOAD_MAX_SIZE=${PHP_UPLOAD_MAX_SIZE:-}
@@ -20,31 +20,27 @@ if [[ "${ALLOWED_PHP_VERSIONS[*]}" =~ "$PHP_VERSION" ]]; then
   sudo apt-get install -y -qq zip unzip apache2 php${PHP_VERSION}-{cli,gd,xml,curl,mbstring,zip,opcache,apcu,mysql,fpm,yaml}
   sudo a2enmod rewrite proxy_fcgi && sudo a2enconf php${PHP_VERSION}-fpm
   
-  echo "[php] add timezone"
-  cat <<EOF | sudo tee /etc/php/${PHP_VERSION}/cli/conf.d/$PROJECT_CODE.ini | sudo tee /etc/php/${PHP_VERSION}/fpm/conf.d/$PROJECT_CODE.ini
-[PHP]
-date.timezone = Asia/Seoul
-post_max_size = 2048GB
-memory_limit = 512MB
-EOF
+  echo "[php] set common config"
+  sudo sed -i 's/date.timezone = .*/date.timezone = 'Asia/Seoul'/' /etc/php/$PHP_VERSION/cli/php.ini /etc/php/$PHP_VERSION/fpm/php.ini
+  sudo sed -i 's/memory_limit = .*/memory_limit = '-1'/' /etc/php/$PHP_VERSION/cli/php.ini /etc/php/$PHP_VERSION/fpm/php.ini
+  sudo sed -i 's/post_max_size = .*/post_max_size = '2048G'/' /etc/php/$PHP_VERSION/cli/php.ini /etc/php/$PHP_VERSION/fpm/php.ini
 
   if [ ! -z $PHP_UPLOAD_MAX_SIZE ]; then
-    cat <<EOF | sudo tee /etc/php/${PHP_VERSION}/cli/conf.d/$PROJECT_CODE.ini | sudo tee /etc/php/${PHP_VERSION}/fpm/conf.d/$PROJECT_CODE.ini
+    cat <<EOF | sudo tee -a /etc/php/${PHP_VERSION}/cli/conf.d/$PROJECT_CODE.ini | sudo tee -a /etc/php/${PHP_VERSION}/fpm/conf.d/$PROJECT_CODE.ini
 upload_max_filesize = $PHP_UPLOAD_MAX_SIZE
 EOF
   fi
 
   if [ ! -z $PHP_UPLOAD_MAX_FILES ]; then
-    cat <<EOF | sudo tee /etc/php/${PHP_VERSION}/cli/conf.d/$PROJECT_CODE.ini | sudo tee /etc/php/${PHP_VERSION}/fpm/conf.d/$PROJECT_CODE.ini
+    cat <<EOF | sudo tee -a /etc/php/${PHP_VERSION}/cli/conf.d/$PROJECT_CODE.ini | sudo tee -a /etc/php/${PHP_VERSION}/fpm/conf.d/$PROJECT_CODE.ini
 max_file_uploads = $PHP_UPLOAD_MAX_FILES
 EOF
   fi
 
   if [ ! -z $PROJECT_ENV ] && [ "$PROJECT_ENV" == "dev" ]; then
-    cat <<EOF | sudo tee /etc/php/${PHP_VERSION}/cli/conf.d/$PROJECT_CODE.ini | sudo tee /etc/php/${PHP_VERSION}/fpm/conf.d/$PROJECT_CODE.ini
+    cat <<EOF | sudo tee -a /etc/php/${PHP_VERSION}/cli/conf.d/$PROJECT_CODE.ini | sudo tee -a /etc/php/${PHP_VERSION}/fpm/conf.d/$PROJECT_CODE.ini
 max_execution_time = 0
 max_input_time = 0
-memory_limit = -1
 EOF
   fi
 
@@ -71,5 +67,5 @@ EOF
 fi
 
 echo "[php] install composer"
-curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer
-sudo chown -R $USER:$USER /usr/lobal/bin
+curl -sS https://getcomposer.org/installer | sudo php -d memory_limit=-1 -- --install-dir=/usr/local/bin --filename=composer
+sudo chown -R $USER /usr/local/bin
