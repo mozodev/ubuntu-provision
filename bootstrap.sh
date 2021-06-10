@@ -34,7 +34,7 @@ UBUNTU_USER_ID=${UBUNTU_USER_ID:-ubuntu}
 UBUNTU_USER_PASS=${UBUNTU_USER_PASS:-ubuntu}
 UBUNTU_USER_SUDO=${UBUNTU_USER_SUDO:-false}
 
-if [ ! id "$UBUNTU_USER_ID" >/dev/null 2>&1 ]; then
+if ! id "$UBUNTU_USER_ID" &>/dev/null; then
     echo [bootstrap] add user $UBUNTU_USER_ID
     adduser --gecos "" --disabled-password $UBUNTU_USER_ID
     chpasswd <<< "$UBUNTU_USER_ID:$UBUNTU_USER_PASS"
