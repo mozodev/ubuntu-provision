@@ -9,7 +9,11 @@ ALLOWED_PHP_VERSIONS=('5.6', '7.0','7.1', '7.2', '7.3', '7.4', '8.0')
 
 PROJECT_CODE=${PROJECT_CODE:-}
 PROJECT_ENV=${PROJECT_ENV:-}
-[ ! -z $PROJECT_CODE ] && sudo mkdir -p /var/www/$PROJECT_CODE/web
+PROJECT_USER=${PROJECT_USER:-ubuntu}
+if [[ ! -z $PROJECT_CODE ]]; then
+  sudo mkdir -p /var/www/$PROJECT_CODE/web
+  sudo chown -R $PROJECT_USER:$PROJECT_USER /var/www/$PROJECT_CODE
+fi
 
 PHP_UPLOAD_MAX_SIZE=${PHP_UPLOAD_MAX_SIZE:-}
 PHP_UPLOAD_MAX_FILES=${PHP_UPLOAD_MAX_FILES:-}
