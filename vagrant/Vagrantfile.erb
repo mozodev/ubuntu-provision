@@ -42,6 +42,7 @@ Vagrant.configure("2") do |config|
     node.vm.provision "shell", path: "<%= script_path %>/db/<%= ENV["DB"] %>.sh", privileged: false
     <% end %>
     <% if %w(drupal wp rails hugo).include? ENV["APP"] %>
+    node.vm.provision "shell", path: "<%= script_path %>/lang/nodejs.sh", privileged: false
     node.vm.provision "shell", path: "<%= script_path %>/app/<%= ENV["APP"] %>.sh", privileged: false
     <% end %>
   end
