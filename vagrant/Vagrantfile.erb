@@ -3,7 +3,7 @@
 <% project_code = File.basename(Dir.getwd)
 box_code = "ubuntu/focal64"
 box_code = box_name unless box_name == "base"
-script_path = "~/MEGA/ubuntu-provision"
+script_path = ENV["VAGRANT_DEFAULT_TEMPLATE"].sub("/vagrant/Vagrantfile.erb", "")
 env_source =  File.expand_path(script_path + "/env.example")
 env_destination = File.expand_path(Dir.getwd) + "/.env" -%>
 
