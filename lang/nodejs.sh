@@ -9,6 +9,7 @@ if [[ "${ALLOWED_NODE_VERSIONS[*]}" =~ "$NODE_VERSION" ]]; then
   echo [nodejs] add repo for v$NODE_VERSION node, yarn
   curl -fsSL https://deb.nodesource.com/setup_$NODE_VERSION.x | sudo -E bash
   sudo apt install -y nodejs
+  sudo npm -g i npm
 else
   echo "$NODE_VERSION not supported."
   exit 1
