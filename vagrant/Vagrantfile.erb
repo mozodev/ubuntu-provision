@@ -3,7 +3,7 @@
 <% project_code = File.basename(Dir.getwd)
 box_code = "ubuntu/focal64"
 box_code = box_name unless box_name == "base"
-script_path = "~/MEGA/ubuntu-provision"
+script_path = ENV["VAGRANT_DEFAULT_TEMPLATE"].sub("/vagrant/Vagrantfile.erb", "")
 env_source =  File.expand_path(script_path + "/env.example")
 env_destination = File.expand_path(Dir.getwd) + "/.env" -%>
 
@@ -42,6 +42,7 @@ Vagrant.configure("2") do |config|
     node.vm.provision "shell", path: "<%= script_path %>/db/<%= ENV["DB"] %>.sh", privileged: false
     <% end %>
     <% if %w(drupal wp rails hugo).include? ENV["APP"] %>
+    node.vm.provision "shell", path: "<%= script_path %>/lang/nodejs.sh", privileged: false
     node.vm.provision "shell", path: "<%= script_path %>/app/<%= ENV["APP"] %>.sh", privileged: false
     <% end %>
   end
