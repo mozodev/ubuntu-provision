@@ -22,6 +22,7 @@ export DEBIAN_FRONTEND=noninteractive
 echo "mariadb-server-$MARIADB_VERSION mysql-server/root_password password ${MYSQL_ROOT_PASSWORD}" | sudo debconf-set-selections
 echo "mariadb-server-$MARIADB_VERSION mysql-server/root_password_again password ${MYSQL_ROOT_PASSWORD}" | sudo debconf-set-selections
 sudo apt-get install -y -qq mariadb-server
+mysql -uroot -pPASS -e "SET PASSWORD = PASSWORD('');"
 
 echo "[mariadb] create user and database"
 sudo mysql -e "CREATE DATABASE ${MYSQL_DATABASE} CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
