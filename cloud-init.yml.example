@@ -19,3 +19,5 @@ runcmd:
   - sudo -u ubuntu -H -i bash -c 'curl -sSL https://git.io/J3MKe | bash'
   # APP:drupal
   - sudo -u ubuntu -H -i bash -c 'curl -sSL https://git.io/J3MKt | bash'
+  # APP:hugo
+  - sudo -u ubuntu -H -i bash -c 'curl -sSL https://git.io/Jnt2g | bash'
