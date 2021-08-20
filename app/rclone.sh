@@ -1,21 +1,18 @@
 #!/bin/bash
 
+if [ -f .env ]; then
+    export $(cat .env | grep -v '#' | awk '/=/ {print $1}')
+fi
+
+UBUNTU_USER=${UBUNTU_USER:ubuntu}
+
 # install rclone
-curl https://rclone.org/install.sh | sudo bash
+curl https://rclone.org/install.sh | bash
 
-RCLONE_CONF=${RCLONE_CONF:-}
-if [ -f "$RCLONE" ]; then
-    mkdir -p ~/.config/rclone/
-    cp $RCLONE ~/.config/rclone/
+mkdir -p /home/${UBUNTU_USER}/.config/rclone/
+chown -R ${UBUNTU_USER}:${UBUNTU_USER} /home/${UBUNTU_USER}/.config/rclone/
+
+FUSE_ALLOW_OTHER=${FUSE_ALLOW_OTHER:-}
+if [ ! -v "$FUSE_ALLOW_OTHER" ]; then
+    echo 'user_allow_other' | tee -a /etc/fuse.conf
 fi
-
-FUSE_CONF=${FUSE_CONF:-}
-if [ -f "$FUSE" ]; then
-    yes | cp $FUSE /etc/fuse.conf
-fi
-sudo mkdir -p /data && sudo chown $USER:$USER /data
-
-if [ -f ~/.config/rclone/rclone.conf ]; then
-    rclone mount drive: /data --allow-other --daemon
-fi
-

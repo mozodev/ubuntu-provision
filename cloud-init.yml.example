@@ -10,14 +10,19 @@ runcmd:
     EOF
   - chown ubuntu:ubuntu /home/ubuntu/.env
   # bootstrap
-  - sudo -u ubuntu -H -i bash -c 'curl -sSL https://git.io/J3yLS | bash'
+  - curl -sSL https://git.io/J3yLS | bash
   # LANG:php
-  - sudo -u ubuntu -H -i bash -c 'curl -sSL https://git.io/J3MVp | bash'
+  - curl -sSL https://git.io/J3MVp | bash
   # LANG:nodejs
-  - sudo -u ubuntu -H -i bash -c 'curl -sSL https://git.io/J3MoH | bash'
+  - curl -sSL https://git.io/J3MoH | bash
   # DB:mariadb
-  - sudo -u ubuntu -H -i bash -c 'curl -sSL https://git.io/J3MKe | bash'
+  - curl -sSL https://git.io/J3MKe | bash
+  # DB:mysql
+  - curl -sSL https://git.io/JRvwE | bash
+  # project
+  - curl -sSL https://git.io/J8k2W | bash
   # APP:drupal
-  - sudo -u ubuntu -H -i bash -c 'curl -sSL https://git.io/J3MKt | bash'
+  - curl -sSL https://git.io/J3MKt | bash
   # APP:hugo
-  - sudo -u ubuntu -H -i bash -c 'curl -sSL https://git.io/Jnt2g | bash'
+  - curl -sSL https://git.io/Jnt2g | bash
+  
