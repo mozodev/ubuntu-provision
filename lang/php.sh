@@ -59,7 +59,6 @@ if [ ! -z $PROJECT_CODE ] && [ -d /var/www/$PROJECT_CODE/web ]; then
   echo "[apache2] add virtualhost $PROJECT_CODE"
   cat <<EOF | tee /etc/apache2/sites-available/$PROJECT_CODE.conf
 <VirtualHost *:80>
-  ServerAdmin $(git config user.email)
   DocumentRoot /var/www/$PROJECT_CODE/web
   <Directory /var/www/$PROJECT_CODE/web>
     Options Indexes FollowSymLinks

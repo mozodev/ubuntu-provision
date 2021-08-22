@@ -8,7 +8,8 @@ PROJECT_GITREPO=${PROJECT_GITREPO:-}
 PROJECT_ROOT=${PROJECT_ROOT:-}
 UBUNTU_USER=${UBUNTU_USER:ubuntu}
 
-ssh-keyscan github.com >> $HOME/.ssh/known_hosts
+ssh-keyscan github.com >> /home/$UBUNTU_USER/.ssh/known_hosts
+chown $UBUNTU_USER:$UBUNTU_USER /home/$UBUNTU_USER/.ssh/known_hosts
 
 if [ ! -v $PROJECT_ROOT ] && [ ! -d $PROJECT_ROOT ]; then
     echo create directory $PROJECT_ROOT and chown to $UBUNTU_USER.
