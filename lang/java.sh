@@ -1,7 +1,7 @@
 #!/bin/bash
 
-if [ -f /vagrant/.env ]; then
-    export $(cat /vagrant/.env | grep -v '#' | awk '/=/ {print $1}')
+if [ -f /root/.env ]; then
+  export $(cat /root/.env | grep -v '#' | awk '/=/ {print $1}')
 fi
 
 JAVA_VERSION=${JAVA_VERSION:-11}
