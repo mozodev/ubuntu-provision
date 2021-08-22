@@ -11,11 +11,6 @@ PROJECT_CODE=${PROJECT_CODE:-}
 PROJECT_ENV=${PROJECT_ENV:-}
 UBUNTU_USER=${UBUNTU_USER:-ubuntu}
 
-if [[ ! -z $PROJECT_CODE ]]; then
-  mkdir -p /var/www/$PROJECT_CODE/web
-  chown -R $UBUNTU_USER:$UBUNTU_USER /var/www/$PROJECT_CODE
-fi
-
 PHP_UPLOAD_MAX_SIZE=${PHP_UPLOAD_MAX_SIZE:-}
 PHP_UPLOAD_MAX_FILES=${PHP_UPLOAD_MAX_FILES:-}
 
@@ -55,6 +50,11 @@ else
   exit 1
 fi
 
+if [[ ! -z $PROJECT_CODE ]]; then
+  mkdir -p /var/www/$PROJECT_CODE/web
+  chown -R $UBUNTU_USER:$UBUNTU_USER /var/www/$PROJECT_CODE
+fi
+
 if [ ! -z $PROJECT_CODE ] && [ -d /var/www/$PROJECT_CODE/web ]; then
   echo "[apache2] add virtualhost $PROJECT_CODE"
   cat <<EOF | tee /etc/apache2/sites-available/$PROJECT_CODE.conf
@@ -73,4 +73,4 @@ fi
 
 echo "[php] install composer"
 curl -sS https://getcomposer.org/installer | php -d memory_limit=-1 -- --install-dir=/usr/local/bin --filename=composer
-chown -R $UBUNTU_USER_ID /usr/local/bin
+chown -R $UBUNTU_USER /usr/local/bin

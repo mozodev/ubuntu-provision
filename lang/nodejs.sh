@@ -4,7 +4,7 @@ if [ -f .env ]; then
 fi
 
 NODE_VERSION=${NODE_VERSION:-14}
-ALLOWED_NODE_VERSIONS=('10', '12', '13', '14', '15')
+ALLOWED_NODE_VERSIONS=('10', '12', '13', '14', '15', '16')
 if [[ "${ALLOWED_NODE_VERSIONS[*]}" =~ "$NODE_VERSION" ]]; then
   echo [nodejs] add repo for v$NODE_VERSION node, yarn
   curl -fsSL https://deb.nodesource.com/setup_$NODE_VERSION.x | bash
