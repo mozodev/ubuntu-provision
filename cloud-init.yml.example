@@ -11,6 +11,7 @@ runcmd:
   - chown ubuntu:ubuntu /home/ubuntu/.env
   # bootstrap
   - curl -sSL https://git.io/J3yLS | bash
+
   # LANG:php
   - curl -sSL https://git.io/J3MVp | bash
   # LANG:nodejs
@@ -25,4 +26,11 @@ runcmd:
   - curl -sSL https://git.io/J3MKt | bash
   # APP:hugo
   - curl -sSL https://git.io/Jnt2g | bash
+
+  # LANG:ruby
+  - curl -sSL https://git.io/JuUWo | bash
+  # DB:postgresql
+  - curl -sSL https://git.io/JuU43 | bash
+  # APP:rails
+  - curl -sSL https://git.io/JuesX | bash
   
