@@ -11,6 +11,13 @@ PSQL_PASS=${PSQL_PASS:-ubuntu}
 PSQL_DBNAME=${PSQL_DBNAME:-ubuntu}
 PSQL_RESTORE=${PSQL_RESTORE:-}
 
+apt-cache show postgresql | grep State
+if [ "$?" -gt "0" ]; then
+    apt-get install -y -qq postgresql-all
+else
+    echo "[postgres] Installed!"
+fi
+
 if [ ! -z "$PSQL_DBNAME" ] && [ ! -z "$PSQL_USER" ]; then
   echo "[postgres] create user and database"
   su - postgres <<EOF
