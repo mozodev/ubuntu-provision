@@ -5,8 +5,8 @@ if [ ! "`whoami`" = "root" ]; then
     exit 1
 fi
 
-if [ -f .env ]; then
-    export $(cat .env | grep -v '#' | awk '/=/ {print $1}')
+if [ -f /root/.env ]; then
+  export $(cat /root/.env | grep -v '#' | awk '/=/ {print $1}')
 fi
 
 UBUNTU_SWAP=${UBUNTU_SWAP:-1G}
@@ -16,6 +16,7 @@ lsb_release -a
 
 echo "[bootstrap] house keeping"
 apt-get -y -qq update && apt-get -y -qq upgrade && apt-get -y -qq autoremove
+apt-get install -y -qq debconf-utils
 timedatectl set-timezone Asia/Seoul && date
 
 echo "[boostrap] adding swap file"
@@ -30,24 +31,24 @@ if [ "$UBUNTU_PERMIT_PASS" = true ]; then
     service sshd restart
 fi
 
-UBUNTU_USER_ID=${UBUNTU_USER_ID:-ubuntu}
+UBUNTU_USER=${UBUNTU_USER:-ubuntu}
 UBUNTU_USER_PASS=${UBUNTU_USER_PASS:-ubuntu}
 UBUNTU_USER_SUDO=${UBUNTU_USER_SUDO:-false}
 
-if ! id "$UBUNTU_USER_ID" &>/dev/null; then
-    echo [bootstrap] add user $UBUNTU_USER_ID
-    adduser --gecos "" --disabled-password $UBUNTU_USER_ID
-    chpasswd <<< "$UBUNTU_USER_ID:$UBUNTU_USER_PASS"
-    echo [bootstrap] added $UBUNTU_USER_ID user
+if ! id "$UBUNTU_USER" &>/dev/null; then
+    echo [bootstrap] add user $UBUNTU_USER
+    adduser --gecos "" --disabled-password $UBUNTU_USER
+    chpasswd <<< "$UBUNTU_USER:$UBUNTU_USER_PASS"
+    echo [bootstrap] added $UBUNTU_USER user
     if [ "$UBUNTU_USER_SUDO" = true ] ; then
-        if ! groups "$UBUNTU_USER_ID" | grep -q '\bsudo\b' ; then
-            usermod -aG sudo $UBUNTU_USER_ID
-            echo "$UBUNTU_USER_ID ALL=(ALL) NOPASSWD:ALL" | tee /etc/sudoers.d/${UBUNTU_USER_ID}
-            echo [bootstrap] added $UBUNTU_USER_ID to sudoers
+        if ! groups "$UBUNTU_USER" | grep -q '\bsudo\b' ; then
+            usermod -aG sudo $UBUNTU_USER
+            echo "$UBUNTU_USER ALL=(ALL) NOPASSWD:ALL" | tee /etc/sudoers.d/${UBUNTU_USER}
+            echo [bootstrap] added $UBUNTU_USER to sudoers
         else
-            echo [bootstrap] $UBUNTU_USER_ID is already sudoer.
+            echo [bootstrap] $UBUNTU_USER is already sudoer.
         fi
     fi
 else
-    echo [bootstrap] $UBUNTU_USER_ID exists.
+    echo [bootstrap] $UBUNTU_USER exists.
 fi

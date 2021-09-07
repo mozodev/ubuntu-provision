@@ -1,9 +1,10 @@
 #!/bin/bash
 
-if [ -f ~/.env ]; then
-    export $(cat .env | grep -v '#' | awk '/=/ {print $1}')
+if [ -f /root/.env ]; then
+  export $(cat /root/.env | grep -v '#' | awk '/=/ {print $1}')
 fi
 
+UBUNTU_USER=${UBUNTU_USER:ubuntu}
 USER_PUBLIC_KEY=${USER_PUBLIC_KEY:-}
 
 if [ ! -v $USER_PUBLIC_KEY ] && [ -f $USER_PUBLIC_KEY ]; then
@@ -13,10 +14,11 @@ if [ ! -v $USER_PUBLIC_KEY ] && [ -f $USER_PUBLIC_KEY ]; then
     echo 'eval `ssh-agent` &> /dev/null 2&>1 && ssh-add' >> ~/.bashrc
 fi
 
-echo 'defscrollback 10000' > ~/.screenrc
-echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
+# For vscode
+echo 'defscrollback 10000' > /home/$UBUNTU_USER/.screenrc
+echo fs.inotify.max_user_watches=524288 | tee -a /etc/sysctl.conf && sudo sysctl -p
 
-cat << 'EOF' >> /home/$USER/.bashrc
+cat << 'EOF' >> /home/$UBUNTU_USER/.bashrc
 alias up="sudo apt update && sudo apt -y --allow-downgrades upgrade && sudo apt -y autoremove"
 
 # User specific environment and startup programs
