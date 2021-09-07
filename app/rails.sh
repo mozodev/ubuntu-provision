@@ -26,3 +26,6 @@ case $RAILS_DB in
     apt-get install -y libpq-dev
     ;;
 esac
+
+UBUNTU_USER=${UBUNTU_USER:-ubuntu}
+su - $UBUNTU_USER -c "gem install rails"
