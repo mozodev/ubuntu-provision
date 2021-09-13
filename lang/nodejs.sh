@@ -1,5 +1,5 @@
 #!/bin/bash
-if [ -f .env ]; then
+if [ -f /root/.env ]; then
   export $(cat /root/.env | grep -v '#' | awk '/=/ {print $1}')
 fi
 
