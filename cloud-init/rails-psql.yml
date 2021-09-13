@@ -1,0 +1,26 @@
+#cloud-config
+package_update: true
+package_upgrade: true
+ssh_import_id:
+  - gh:mozodev
+runcmd:
+  - |
+    cat << 'EOF' >> /root/.env
+    RUBY_VERSION=2.7.4
+    PSQL_USER=rails
+    PSQL_USER_PASS=rails
+    PSQL_DATABASE=rails
+    RAILS_QUEUE=true
+    RAILS_DB=postgresql
+    EOF
+  # bootstrap
+  - curl -sSL https://git.io/J3yLS | bash
+  # LANG:nodejs
+  - curl -sSL https://git.io/J3MoH | bash
+  # LANG:ruby
+  - curl -sSL https://git.io/JuUWo | bash
+  # DB:postgresql
+  - curl -sSL https://git.io/JuU43 | bash
+  # APP:rails
+  - curl -sSL https://git.io/JuesX | bash
+  
