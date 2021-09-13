@@ -41,7 +41,7 @@ Vagrant.configure("2") do |config|
     <% if %w(mariadb mysql postgresql).include? ENV["DB"] %>
     node.vm.provision "shell", path: "<%= script_path %>/db/<%= ENV["DB"] %>.sh"
     <% end %>
-    <% if %w(drupal wp rails hugo).include? ENV["APP"] %>
+    <% if %w(drupal wp rails hugo mecab-ko).include? ENV["APP"] %>
     node.vm.provision "shell", path: "<%= script_path %>/lang/nodejs.sh"
     node.vm.provision "shell", path: "<%= script_path %>/app/<%= ENV["APP"] %>.sh"
     <% end %>
