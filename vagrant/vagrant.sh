@@ -1,17 +1,26 @@
 #!/bin/bash
 
+if [ ! "`whoami`" = "root" ]; then
+    echo "\nPlease run script as root."
+    exit 1
+fi
+
+if [ -f /home/vagrant/.env ]; then
+  mv /home/vagrant/.env /root/.env
+fi
+
 if [ -f /root/.env ]; then
   export $(cat /root/.env | grep -v '#' | awk '/=/ {print $1}')
 fi
 
-UBUNTU_USER=${UBUNTU_USER:ubuntu}
+UBUNTU_USER=${UBUNTU_USER:-ubuntu}
 USER_PUBLIC_KEY=${USER_PUBLIC_KEY:-}
 
 if [ ! -v $USER_PUBLIC_KEY ] && [ -f $USER_PUBLIC_KEY ]; then
     echo add ssh key to agent.
-    cat $USER_PUBLIC_KEY >> ~/.ssh/authorized_keys
+    cat $USER_PUBLIC_KEY >> /home/$UBUNTU_USER/.ssh/authorized_keys
     eval "$(ssh-agent -s)" && ssh-add
-    echo 'eval `ssh-agent` &> /dev/null 2&>1 && ssh-add' >> ~/.bashrc
+    echo 'eval `ssh-agent` &> /dev/null 2&>1 && ssh-add' >> /home/$UBUNTU_USER/.bashrc
 fi
 
 # For vscode
