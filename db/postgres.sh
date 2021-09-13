@@ -9,14 +9,14 @@ UBUNTU_USER=${UBUNTU_USER:-ubuntu}
 PSQL_USER=${PSQL_USER:-ubuntu}
 PSQL_PASS=${PSQL_PASS:-ubuntu}
 PSQL_DBNAME=${PSQL_DBNAME:-ubuntu}
-PSQL_RESTORE=${PSQL_RESTORE:-}
+PSQL_DUMP=${PSQL_DUMP:-}
 
-apt-cache show postgresql | grep State
-if [ "$?" -gt "0" ]; then
-    apt-get install -y -qq postgresql-all
-else
-    echo "[postgres] Installed!"
+echo "[postgres] start!"
+if [[ $(apt-cache show postgresql | grep State) -eq 0 ]]; then
+  apt-get update && apt-get install -y -qq postgresql-all
+  systemctl enable postgresql && systemctl start postgresql
 fi
+echo "[postgres] Installed!"
 
 if [ ! -z "$PSQL_DBNAME" ] && [ ! -z "$PSQL_USER" ]; then
   echo "[postgres] create user and database"
@@ -26,15 +26,21 @@ if [ ! -z "$PSQL_DBNAME" ] && [ ! -z "$PSQL_USER" ]; then
   psql -c "GRANT ALL PRIVILEGES ON DATABASE $PSQL_DBNAME TO $PSQL_USER;"
 EOF
   echo "[postgres] User '$PSQL_USER' and database '$PSQL_DBNAME' created."
-  su - $UBUNTU_USER -c "tee /home/$UBUNTU_USER/.pg_service.conf > /dev/null" <<EOF
+  su - $UBUNTU_USER -c "tee ~/.pg_service.conf > /dev/null" <<EOF
 [$PSQL_DBNAME]
 host=127.0.0.1
 dbname=$PSQL_DBNAME
 user=$PSQL_USER
 password=$PSQL_PASS
 EOF
+  su - $UBUNTU_USER -c "tee -a ~/.bash_profile > /dev/null" <<EOF
+export PGSERVICE=$PSQL_DBNAME
+EOF
 fi
 
-if [ ! -z "$PSQL_RESTORE" ] && [ -f "$PSQL_RESTORE" ]; then
-  echo "[postgres] $PSQL_RESTORE exists and restoring to $PSQL_DBNAME"
+if [ ! -z "$PSQL_DUMP" ] && [ -f "$PSQL_DUMP" ]; then
+  echo "[postgres] $PSQL_DUMP exists and restoring to $PSQL_DBNAME"
+  su - $UBUNTU_USER -c "pg_restore -d $PSQL_DBNAME $PSQL_DUMP"
 fi
+
+echo "[postgres] end!"

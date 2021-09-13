@@ -1,0 +1,16 @@
+#cloud-config
+ssh_import_id:
+  - gh:mozodev
+runcmd:
+  - |
+    cat << 'EOF' >> /root/.env
+    PHP_VERSION=8.0
+    PROJECT_CODE=vagrant
+    PROJECT_ENV=dev
+    EOF
+  # LANG:php
+  - curl -sSL https://git.io/J3MVp | bash
+  # LANG:nodejs
+  - curl -sSL https://git.io/J3MoH | bash
+  # DB:mariadb
+  - curl -sSL https://git.io/J3MKe | bash

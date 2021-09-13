@@ -22,3 +22,6 @@ if [ ! -e .rbenv/versions/$RUBY_VERSION ]; then
   su - $UBUNTU_USER -c "rbenv install $RUBY_VERSION && rbenv global $RUBY_VERSION"
   su - $UBUNTU_USER -c "echo 'gem: --no-ri --no-rdoc --no-document --suggestions' >> ~/.gemrc && gem install bundler"
 fi
+
+echo [rbenv] check
+su - $UBUNTU_USER -c "wget -q 'https://github.com/rbenv/rbenv-installer/raw/HEAD/bin/rbenv-doctor' -O- | bash"
