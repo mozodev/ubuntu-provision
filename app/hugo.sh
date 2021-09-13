@@ -5,10 +5,19 @@ if [ -f /root/.env ]; then
 fi
 
 UBUNTU_USER=${UBUNTU_USER:ubuntu}
+pushd /tmp/
+curl -s https://api.github.com/repos/gohugoio/hugo/releases/latest \
+| grep "browser_download_url.*hugo_extended.*_Linux-64bit\.tar\.gz" \
+| cut -d ":" -f 2,3 \
+| tr -d \" \
+| wget -qi -
 
-/bin/bash -c "NONINTERACTIVE=1 $(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-
-echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> /home/${UBUNTU_USER}/.bashrc
-echo 'alias hs="hugo server -D -b 0.0.0.0"' >> ~/home/${UBUNTU_USER}/.bash_aliases
-sudo -u ${UBUNTU_USER} -H -i bash -c 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"'
-sudo -u ${UBUNTU_USER} -H -i bash -c 'brew install hugo'
+tarball="$(find . -name "*Linux-64bit.tar.gz")"
+tar -xzf $tarball
+chmod 755 hugo && chown $UBUNTU_USER:$UBUNTU_USER hugo
+mv hugo /usr/local/bin/
+popd
+location="$(which hugo)"
+echo "Hugo binary location: $location"
+version="$(hugo version)"
+echo "Hugo binary version: $version"
