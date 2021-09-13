@@ -1,13 +1,10 @@
 # ubuntu-provision
 Provisioning script template for ubuntu virtual environment using vagrant or multipass cloud init.
 
-```
-Included List
+## Included List
 * Language - Java, NodeJS, PHP, Ruby(using rbenv)
 * DB - MariaDB, MySQL, Postgres
 * APP - Code Server, Docker, Drupal, Hugo, Ruby on Rails, Rclone, Seatable, Wordpress, [mecab-ko](https://bitbucket.org/eunjeon/mecab-ko/src/master/README.md)
-
-```
 
 ## how to use with VAGRANT
 1. clone the repo
