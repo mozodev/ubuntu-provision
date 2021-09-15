@@ -23,6 +23,22 @@ if [ ! -v $USER_PUBLIC_KEY ] && [ -f $USER_PUBLIC_KEY ]; then
     echo 'eval `ssh-agent` &> /dev/null 2&>1 && ssh-add' >> /home/$UBUNTU_USER/.bashrc
 fi
 
+# copy provision files to $UBUNTU_USER
+if [ -f /home/vagrant/.gitconfig ]; then
+  cp /home/vagrant/.gitconfig /home/$UBUNTU_USER/.gitconfig
+  chown $UBUNTU_USER:$UBUNTU_USER /home/$UBUNTU_USER/.gitconfig
+fi
+
+if [ -f /home/vagrant/.ssh/id_rsa ]; then
+  cp /home/vagrant/.ssh/id_rsa /home/$UBUNTU_USER/.ssh/id_rsa
+  chown $UBUNTU_USER:$UBUNTU_USER /home/$UBUNTU_USER/.ssh/id_rsa
+fi
+
+if [ -f /home/vagrant/.ssh/id_rsa.pub ]; then
+  cp /home/vagrant/.ssh/id_rsa.pub /home/$UBUNTU_USER/.ssh/id_rsa.pub
+  chown $UBUNTU_USER:$UBUNTU_USER /home/$UBUNTU_USER/.ssh/id_rsa.pub
+fi
+
 # For vscode
 echo 'defscrollback 10000' > /home/$UBUNTU_USER/.screenrc
 echo fs.inotify.max_user_watches=524288 | tee -a /etc/sysctl.conf && sudo sysctl -p
