@@ -5,6 +5,10 @@ if [ ! "`whoami`" = "root" ]; then
     exit 1
 fi
 
+if [ -f /home/vagrant/.env ]; then
+  mv /home/vagrant/.env /root/.env
+fi
+
 if [ -f /root/.env ]; then
   export $(cat /root/.env | grep -v '#' | awk '/=/ {print $1}')
 fi
