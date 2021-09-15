@@ -5,10 +5,6 @@ if [ ! "`whoami`" = "root" ]; then
     exit 1
 fi
 
-if [ -f /home/vagrant/.env ]; then
-  mv /home/vagrant/.env /root/.env
-fi
-
 if [ -f /root/.env ]; then
   export $(cat /root/.env | grep -v '#' | awk '/=/ {print $1}')
 fi
@@ -23,10 +19,12 @@ apt-get -y -qq update && apt-get -y -qq upgrade && apt-get -y -qq autoremove
 apt-get install -y -qq debconf-utils
 timedatectl set-timezone Asia/Seoul && date
 
-echo "[boostrap] adding swap file"
-fallocate -l ${UBUNTU_SWAP} /swapfile && chmod 600 /swapfile
-mkswap /swapfile && swapon /swapfile
-echo '/swapfile none swap defaults 0 0' | tee -a /etc/fstab
+if [[ $(swapon -s | wc -l) -lt 1 ]]; then
+    echo "[boostrap] adding swap file"
+    fallocate -l ${UBUNTU_SWAP} /swapfile && chmod 600 /swapfile
+    mkswap /swapfile && swapon /swapfile
+    echo '/swapfile none swap defaults 0 0' | tee -a /etc/fstab
+fi
 
 UBUNTU_PERMIT_PASS=${UBUNTU_PERMIT_PASS:-false}
 if [ "$UBUNTU_PERMIT_PASS" = true ]; then
@@ -56,3 +54,9 @@ if ! id "$UBUNTU_USER" &>/dev/null; then
 else
     echo [bootstrap] $UBUNTU_USER exists.
 fi
+
+# https://github.com/cli/cli/blob/trunk/docs/install_linux.md
+echo [bootstrap] install gh.
+curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | gpg --dearmor -o /usr/share/keyrings/githubcli-archive-keyring.gpg
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+apt update && apt -y -qq install gh
