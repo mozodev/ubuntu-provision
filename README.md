@@ -26,6 +26,10 @@ $ cd foo
 $ APP=hugo vagrant init
 ```
 * Reference vagrant/Vagrantfile.erb for list of parameters to include as provision scripts.
+* If declaring multiple langs, db, apps, delimit them with comma(s).
+```
+$ APP=hugo,rclone,mecab-ko vagrant init
+```
 
 4. Further modify your Vagrantfile or .env file and then vagrant up.
 ```
