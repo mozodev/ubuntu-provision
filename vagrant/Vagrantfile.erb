@@ -8,7 +8,6 @@ env_source =  File.expand_path(script_path + "/env.example")
 env_destination = File.expand_path(Dir.getwd) + "/.env" -%>
 
 Vagrant.configure("2") do |config|
-
   config.vm.define "<%= project_code %>" do |node|
     node.vm.box = "<%= box_code %>"
     node.vm.hostname = "<%= project_code %>"
@@ -34,17 +33,30 @@ Vagrant.configure("2") do |config|
     <% end %>
     node.vm.provision "shell", path: "<%= script_path %>/bootstrap.sh"
     node.vm.provision "shell", path: "<%= script_path %>/vagrant/vagrant.sh"
-    <% if %w(php rbenv java).include? ENV["LANG"] %>
-    node.vm.provision "shell", path: "<%= script_path %>/lang/<%= ENV["LANG"] %>.sh"
-    node.vm.provision "shell", path: "<%= script_path %>/lang/nodejs.sh"
+    <% unless ENV["DB"].nil? %>
+    <% databases = ENV["DB"].split(',') %>
+    <% databases.each do |db| %>
+    <% if %w(mariadb mysql postgresql).include? db %>
+    node.vm.provision "shell", path: "<%= script_path %>/db/<%= db %>.sh"
     <% end %>
-    <% if %w(mariadb mysql postgresql).include? ENV["DB"] %>
-    node.vm.provision "shell", path: "<%= script_path %>/db/<%= ENV["DB"] %>.sh"
     <% end %>
-    <% if %w(drupal wp rails hugo mecab-ko).include? ENV["APP"] %>
+    <% end %>
+    <% unless ENV["LANG"].nil? %>
+    <% langs = ENV["LANG"].split(',') %>
+    <% langs.each do |lang| %>
+    <% if %w(php rbenv java).include? lang %>
+    node.vm.provision "shell", path: "<%= script_path %>/lang/<%= lang %>.sh"
+    <% end %>
+    <% end %>
+    <% end %>
     node.vm.provision "shell", path: "<%= script_path %>/lang/nodejs.sh"
-    node.vm.provision "shell", path: "<%= script_path %>/app/<%= ENV["APP"] %>.sh"
+    <% unless ENV["APP"].nil? %>
+    <% apps = ENV["APP"].split(',') %>
+    <% apps.each do |app| %>
+    <% if %w(drupal wp rails hugo rclone mecab-ko).include? app %>
+    node.vm.provision "shell", path: "<%= script_path %>/app/<%= app %>.sh"
+    <% end %>
+    <% end %>
     <% end %>
   end
-
 end
