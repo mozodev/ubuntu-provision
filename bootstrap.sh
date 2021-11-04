@@ -16,7 +16,7 @@ lsb_release -a
 
 echo "[bootstrap] house keeping"
 apt-get -y -qq update && apt-get -y -qq upgrade && apt-get -y -qq autoremove
-apt-get install -y -qq debconf-utils
+apt-get install -y -qq debconf-utils sqlite3
 timedatectl set-timezone Asia/Seoul && date
 
 if [[ $(swapon -s | wc -l) -lt 1 ]]; then
@@ -59,4 +59,8 @@ fi
 echo [bootstrap] install gh.
 curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | gpg --dearmor -o /usr/share/keyrings/githubcli-archive-keyring.gpg
 echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
-apt update && apt -y -qq install gh
+apt update && apt-get -y -qq install gh
+
+echo [bootstrap] add aliases.
+echo 'alias up="sudo apt update && sudo apt upgrade- y && sudo apt autoremove -y"' >> /home/$UBUNTU_USER/.bash_aliases
+chown $UBUNTU_USER:$UBUNTU_USER /home/$UBUNTU_USER/.bash_aliases
