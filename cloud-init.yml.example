@@ -1,36 +1,50 @@
 #cloud-config
+
+# package_update: true
+# package_upgrade: true
+
+# public keys | ssh_authorized_keys:
 ssh_import_id:
   - gh:{{ github_username }}
+# private keys
+ssh_keys:
+  rsa_private: |
+
+# @see env.example
+write_files:
+- path: /root/.env
+  content: |
+    PHP_VERSION=7.3
+    PROJECT_CODE=kyeol-composer
+    PROJECT_ROOT=/var/www/kyeol-composer
+    MYSQL_VERSION=5.7
+
 runcmd:
-  - |
-    cat << 'EOF' >> /root/.env
-    PHP_VERSION=7.4
-    # @see env.example
-    EOF
-  # bootstrap
-  - curl -sSL https://git.io/J3yLS | bash
+# bootstrap
+- curl -sSL https://git.io/J3yLS | bash
 
-  # LANG:php
-  - curl -sSL https://git.io/J3MVp | bash
-  # LANG:nodejs
-  - curl -sSL https://git.io/J3MoH | bash
-  # LANG:ruby
-  - curl -sSL https://git.io/JuUWo | bash
+# LANG:php
+- curl -sSL https://git.io/J3MVp | bash
+# LANG:nodejs
+- curl -sSL https://git.io/J3MoH | bash
+# LANG:ruby
+- curl -sSL https://git.io/JuUWo | bash
+# LANG:go
+- curl -sSL https://git.io/JuMfR | bash
 
-  # DB:mariadb
-  - curl -sSL https://git.io/J3MKe | bash
-  # DB:mysql
-  - curl -sSL https://git.io/JRvwE | bash
-  # DB:postgresql
-  - curl -sSL https://git.io/JuU43 | bash
+# DB:mariadb
+- curl -sSL https://git.io/J3MKe | bash
+# DB:mysql
+- curl -sSL https://git.io/JRvwE | bash
+# DB:postgresql
+- curl -sSL https://git.io/JuU43 | bash
 
-  # project
-  - curl -sSL https://git.io/J8k2W | bash
+# project
+- curl -sSL https://git.io/J8k2W | bash
 
-  # APP:drupal
-  - curl -sSL https://git.io/J3MKt | bash
-  # APP:hugo
-  - curl -sSL https://git.io/Jnt2g | bash
-  # APP:rails
-  - curl -sSL https://git.io/JuesX | bash
-  
+# APP:drupal
+- curl -sSL https://git.io/J3MKt | bash
+# APP:hugo
+- curl -sSL https://git.io/Jnt2g | bash
+# APP:rails
+- curl -sSL https://git.io/JuesX | bash

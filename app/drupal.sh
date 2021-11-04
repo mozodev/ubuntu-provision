@@ -15,5 +15,5 @@ echo "[php] install coder and drupal coding standard globally"
 sudo -u ${UBUNTU_USER} -H -i bash -c 'composer global require drupal/coder dealerdirect/phpcodesniffer-composer-installer'
 
 if [ ! -z "$PROJECT_ROOT" ] && [ -d "$PROJECT_ROOT" ]; then
-    sudo -u ${UBUNTU_USER} -H -i bash -c 'phpcs --config-set installed_paths $PROJECT_ROOT/vendor/drupal/coder/coder_sniffer/'
+  sudo -u ${UBUNTU_USER} -H -i bash -c 'phpcs --config-set installed_paths $PROJECT_ROOT/vendor/drupal/coder/coder_sniffer/'
 fi

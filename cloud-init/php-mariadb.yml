@@ -1,16 +1,19 @@
 #cloud-config
 ssh_import_id:
   - gh:mozodev
+
+write_files:
+- path: /root/.env
+  content: |
+    PHP_VERSION=7.4
+    MYSQL_VERSION=8.0
+
 runcmd:
-  - |
-    cat << 'EOF' >> /root/.env
-    PHP_VERSION=8.0
-    PROJECT_CODE=vagrant
-    PROJECT_ENV=dev
-    EOF
-  # LANG:php
-  - curl -sSL https://git.io/J3MVp | bash
-  # LANG:nodejs
-  - curl -sSL https://git.io/J3MoH | bash
-  # DB:mariadb
-  - curl -sSL https://git.io/J3MKe | bash
+# bootstrap
+- curl -sSL https://git.io/J3yLS | bash
+# LANG:php
+- curl -sSL https://git.io/J3MVp | bash
+# LANG:nodejs
+- curl -sSL https://git.io/J3MoH | bash
+# DB:mariadb
+- curl -sSL https://git.io/J3MKe | bash
