@@ -53,7 +53,7 @@ fi
 [ ! -v $PROJECT_ROOT ] && mkdir -p $PROJECT_ROOT
 if [ ! -v $PROJECT_GITREPO ] && [ -d $PROJECT_ROOT ]; then
   echo clone project TO $PROJECT_ROOT.
-  git clone $PROJECT_GITREPO $PROJECT_ROOT
+  sudo -u ${UBUNTU_USER} -H -i bash -c "git clone $PROJECT_GITREPO $PROJECT_ROOT"
   mkdir -p $PROJECT_ROOT/web
   chown -R $UBUNTU_USER:$UBUNTU_USER $PROJECT_ROOT
 fi
@@ -75,5 +75,6 @@ EOF
 fi
 
 echo "[php] install composer"
-curl -sS https://getcomposer.org/installer | php -d memory_limit=-1 -- --install-dir=/usr/local/bin --filename=composer
-chown -R $UBUNTU_USER:$UBUNTU_USER /usr/local/bin
+curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer
+chown -R $UBUNTU_USER:$UBUNTU_USER /usr/local/bin && composer -V
+echo 'export PATH="~/.composer/vendor/bin:$PATH"' >> /home/$UBUNTU_USER/.profile
