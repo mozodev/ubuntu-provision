@@ -6,9 +6,6 @@
 # public keys | ssh_authorized_keys:
 ssh_import_id:
   - gh:{{ github_username }}
-# private keys
-ssh_keys:
-  rsa_private: |
 
 # @see env.example
 write_files:
@@ -18,6 +15,9 @@ write_files:
     PROJECT_CODE=kyeol-composer
     PROJECT_ROOT=/var/www/kyeol-composer
     MYSQL_VERSION=5.7
+# private key
+- path: /root/.ssh/id_ras
+  content: |
 
 runcmd:
 # bootstrap
