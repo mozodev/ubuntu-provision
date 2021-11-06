@@ -4,9 +4,6 @@ if [ -f /root/.env ]; then
   export $(cat /root/.env | grep -v '#' | awk '/=/ {print $1}')
 fi
 
-MYSQL_VERSION=${MYSQL_VERSION:-8.0}
-ALLOWED_MYSQL_VERSIONS=('5.7', '8.0')
-
 MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-root}
 MYSQL_USER=${MYSQL_USER:-ubuntu}
 MYSQL_USER_PASS=${MYSQL_USER_PASS:-ubuntu}
@@ -15,30 +12,10 @@ MYSQL_DATADIR=${MYSQL_DATADIR:-}
 MYSQL_INITDB=${MYSQL_INITDB:-}
 UBUNTU_USER=${UBUNTU_USER:-ubuntu}
 
-if [[ "${ALLOWED_MYSQL_VERSIONS[*]}" =~ "$MYSQL_VERSION" ]]; then
-  echo "[mysql] install version $MYSQL_VERSION"
-  if [ "$MYSQL_VERSION" = '5.7' ]; then
-    # https://www.how2shout.com/linux/add-repository-to-install-mysql-5-7-on-ubuntu-20-04-lts-linux/
-    # add oracle mysql repo for 5.7
-    debconf-set-selections <<< "mysql-apt-config/unsupported-platform: ubuntu bionic"
-    debconf-set-selections <<< "mysql-apt-config/repo-codename: bionic"
-    debconf-set-selections <<< "mysql-apt-config/select-server: mysql-5.7"
-    debconf-set-selections <<< "mysql-apt-config/repo-url: http://repo.mysql.com/apt"
-    debconf-set-selections <<< "mysql-apt-config/select-product: Ok"
-    debconf-set-selections <<< "mysql-apt-config/repo-distro: ubuntu"
-    debconf-set-selections <<< "mysql-apt-config/tools-component: mysql-tools"
-    curl -sS https://repo.mysql.com//mysql-apt-config_0.8.12-1_all.deb | DEBIAN_FRONTEND=noninteractive apt -y install
-    # install 5.7
-    debconf-set-selections <<< "mysql-server-5.7    mysql-server/root_password  ${MYSQL_ROOT_PASSWORD}"
-    debconf-set-selections <<< "mysql-server-5.7    mysql-server/root_password_again    ${MYSQL_ROOT_PASSWORD}"
-    DEBIAN_FRONTEND=noninteractive apt-get install -y -qq mysql-server=5.7.36-1ubuntu18.04
-  else
-    # install 8.0
-    debconf-set-selections <<< "mysql-server    mysql-server/root-pass  password    ${MYSQL_ROOT_PASSWORD}"
-    debconf-set-selections <<< "mysql-server    mysql-server/re-root-pass   password    ${MYSQL_ROOT_PASSWORD}"
-    DEBIAN_FRONTEND=noninteractive apt-get install -y -qq mysql-server
-  fi
-fi
+echo "[mysql] install mysql-server"
+debconf-set-selections <<< "mysql-server    mysql-server/root-pass  password    ${MYSQL_ROOT_PASSWORD}"
+debconf-set-selections <<< "mysql-server    mysql-server/re-root-pass   password    ${MYSQL_ROOT_PASSWORD}"
+DEBIAN_FRONTEND=noninteractive apt-get install -y -qq mysql-server
 
 if [ ! -z "$MYSQL_DATABASE" ] && [ ! -z "$MYSQL_USER" ]; then
   echo "[mysql] create user and database"
