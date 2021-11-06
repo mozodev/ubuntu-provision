@@ -4,12 +4,14 @@ if [ -f /root/.env ]; then
   export $(cat /root/.env | grep -v '#' | awk '/=/ {print $1}')
 fi
 
+UBUNTU_USER=${UBUNTU_USER:-ubuntu}
 PHP_VERSION=${PHP_VERSION:-8.0}
 ALLOWED_PHP_VERSIONS=('5.6', '7.0','7.1', '7.2', '7.3', '7.4', '8.0')
 
 PROJECT_CODE=${PROJECT_CODE:-}
 PROJECT_ENV=${PROJECT_ENV:-}
-UBUNTU_USER=${UBUNTU_USER:-ubuntu}
+PROJECT_GITREPO=${PROJECT_GITREPO:-}
+PROJECT_ROOT=${PROJECT_ROOT:-}
 
 PHP_UPLOAD_MAX_SIZE=${PHP_UPLOAD_MAX_SIZE:-}
 PHP_UPLOAD_MAX_FILES=${PHP_UPLOAD_MAX_FILES:-}
@@ -48,6 +50,12 @@ EOF
 else
   echo "$PHP_VERSION not supported."
   exit 1
+fi
+
+if [ ! -v $PROJECT_GITREPO ] && [ -d $PROJECT_ROOT ]; then
+  echo clone project TO $PROJECT_ROOT.
+  git clone $PROJECT_GITREPO $PROJECT_ROOT
+  chown -R $UBUNTU_USER:$UBUNTU_USER $PROJECT_ROOT
 fi
 
 if [[ ! -z $PROJECT_CODE ]]; then
