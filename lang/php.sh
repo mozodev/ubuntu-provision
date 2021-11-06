@@ -23,9 +23,9 @@ if [[ "${ALLOWED_PHP_VERSIONS[*]}" =~ "$PHP_VERSION" ]]; then
   a2enmod rewrite proxy_fcgi && a2enconf php${PHP_VERSION}-fpm
   
   echo "[php] set common config"
-  sed -i 's/date.timezone = .*/date.timezone = 'Asia/Seoul'/' /etc/php/$PHP_VERSION/cli/php.ini /etc/php/$PHP_VERSION/fpm/php.ini
-  sed -i 's/memory_limit = .*/memory_limit = '-1'/' /etc/php/$PHP_VERSION/cli/php.ini /etc/php/$PHP_VERSION/fpm/php.ini
-  sed -i 's/post_max_size = .*/post_max_size = '2048G'/' /etc/php/$PHP_VERSION/cli/php.ini /etc/php/$PHP_VERSION/fpm/php.ini
+  sed -ie 's/\;date\.timezone\ =/date\.timezone\ =\ Asia\/Seoul/g' /etc/php/$PHP_VERSION/cli/php.ini /etc/php/$PHP_VERSION/fpm/php.ini
+  sed -ie 's/memory_limit = .*/memory_limit = '-1'/' /etc/php/$PHP_VERSION/cli/php.ini /etc/php/$PHP_VERSION/fpm/php.ini
+  sed -ie 's/post_max_size = .*/post_max_size = '2048G'/' /etc/php/$PHP_VERSION/cli/php.ini /etc/php/$PHP_VERSION/fpm/php.ini
 
   if [ ! -z $PHP_UPLOAD_MAX_SIZE ]; then
     cat <<EOF | tee -a /etc/php/${PHP_VERSION}/cli/conf.d/$PROJECT_CODE.ini | tee -a /etc/php/${PHP_VERSION}/fpm/conf.d/$PROJECT_CODE.ini
@@ -45,39 +45,35 @@ max_execution_time = 0
 max_input_time = 0
 EOF
   fi
-
-  echo 'php_admin_value[error_log] = /var/www/$PROJECT_CODE/fpm-php.www.error.log' | tee -a /etc/php/${PHP_VERSION}/fpm/pool.d/www.conf
 else
   echo "$PHP_VERSION not supported."
   exit 1
 fi
 
+[ ! -v $PROJECT_ROOT ] && mkdir -p $PROJECT_ROOT
 if [ ! -v $PROJECT_GITREPO ] && [ -d $PROJECT_ROOT ]; then
   echo clone project TO $PROJECT_ROOT.
   git clone $PROJECT_GITREPO $PROJECT_ROOT
+  mkdir -p $PROJECT_ROOT/web
   chown -R $UBUNTU_USER:$UBUNTU_USER $PROJECT_ROOT
 fi
 
-if [[ ! -z $PROJECT_CODE ]]; then
-  mkdir -p /var/www/$PROJECT_CODE/web
-  chown -R $UBUNTU_USER:$UBUNTU_USER /var/www/$PROJECT_CODE
-fi
-
-if [ ! -z $PROJECT_CODE ] && [ -d /var/www/$PROJECT_CODE/web ]; then
+if [ ! -z $PROJECT_CODE ] && [ -d $PROJECT_ROOT/web ]; then
   echo "[apache2] add virtualhost $PROJECT_CODE"
   cat <<EOF | tee /etc/apache2/sites-available/$PROJECT_CODE.conf
 <VirtualHost *:80>
-  DocumentRoot /var/www/$PROJECT_CODE/web
-  <Directory /var/www/$PROJECT_CODE/web>
+  DocumentRoot $PROJECT_ROOT/web
+  <Directory $PROJECT_ROOT/web>
     Options Indexes FollowSymLinks
     AllowOverride All
     Require all granted
   </Directory>
 </VirtualHost>
 EOF
+  echo "php_admin_value[error_log] = /var/www/$PROJECT_CODE/fpm-php.error.log" | tee -a /etc/php/${PHP_VERSION}/fpm/pool.d/www.conf
   a2dissite 000-default && a2ensite $PROJECT_CODE && service apache2 reload
 fi
 
 echo "[php] install composer"
 curl -sS https://getcomposer.org/installer | php -d memory_limit=-1 -- --install-dir=/usr/local/bin --filename=composer
-chown -R $UBUNTU_USER /usr/local/bin
+chown -R $UBUNTU_USER:$UBUNTU_USER /usr/local/bin
