@@ -15,7 +15,7 @@ MYSQL_DATADIR=${MYSQL_DATADIR:-}
 MYSQL_INITDB=${MYSQL_INITDB:-}
 UBUNTU_USER=${UBUNTU_USER:-ubuntu}
 
-if [[ "${ALLOWED_MYSQL_VERSIONS[*]}" =~ "$MYSQL_VERSION" ]]; the
+if [[ "${ALLOWED_MYSQL_VERSIONS[*]}" =~ "$MYSQL_VERSION" ]]; then
   echo "[mysql] install version $MYSQL_VERSION"
   if [ "$MYSQL_VERSION" = '5.7' ]; then
     # https://www.how2shout.com/linux/add-repository-to-install-mysql-5-7-on-ubuntu-20-04-lts-linux/
