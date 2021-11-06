@@ -70,8 +70,6 @@ if [ -f /root/.ssh/id_rsa ]; then
   cp /root/.ssh/id_rsa /home/$UBUNTU_USER/.ssh/
   chmod 400 /home/$UBUNTU_USER/.ssh/id_rsa
   chown $UBUNTU_USER:$UBUNTU_USER /home/$UBUNTU_USER/.ssh/id_rsa
-  cat << 'EOF' >> /home/$UBUNTU_USER/.bash_profile
-eval "$(ssh-agent -s)"
-ssh-add ~/id_rsa
-EOF
+  echo 'eval "$(ssh-agent -s)"' >> /home/$UBUNTU_USER/.bash_profile
+  echo 'ssh-add ~/.ssh/id_rsa' >> /home/ubuntu/.bash_profile
 fi
