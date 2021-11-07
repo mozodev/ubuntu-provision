@@ -50,7 +50,7 @@ else
   exit 1
 fi
 
-[ ! -v $PROJECT_ROOT ] && mkdir -p $PROJECT_ROOT
+[ ! -d $PROJECT_ROOT ] && mkdir -p $PROJECT_ROOT
 if [ ! -v $PROJECT_GITREPO ] && [ -d $PROJECT_ROOT ]; then
   echo clone project TO $PROJECT_ROOT.
   chown -R $UBUNTU_USER:$UBUNTU_USER $PROJECT_ROOT
