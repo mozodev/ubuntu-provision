@@ -53,9 +53,8 @@ fi
 [ ! -v $PROJECT_ROOT ] && mkdir -p $PROJECT_ROOT
 if [ ! -v $PROJECT_GITREPO ] && [ -d $PROJECT_ROOT ]; then
   echo clone project TO $PROJECT_ROOT.
-  sudo -u ${UBUNTU_USER} -H -i bash -c "git clone $PROJECT_GITREPO $PROJECT_ROOT"
-  mkdir -p $PROJECT_ROOT/web
   chown -R $UBUNTU_USER:$UBUNTU_USER $PROJECT_ROOT
+  sudo -u ${UBUNTU_USER} -H -i bash -c "git clone $PROJECT_GITREPO $PROJECT_ROOT"
 fi
 
 if [ ! -z $PROJECT_CODE ] && [ -d $PROJECT_ROOT/web ]; then
