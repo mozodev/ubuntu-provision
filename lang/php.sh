@@ -74,6 +74,6 @@ EOF
 fi
 
 echo "[php] install composer"
-curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer
+sudo -u ${UBUNTU_USER} -H -i bash -c 'cd ~/ && curl -sS https://getcomposer.org/installer | php && sudo mv composer.phar /usr/local/bin/composer'
 chown -R $UBUNTU_USER:$UBUNTU_USER /usr/local/bin && composer -V
 echo 'export PATH="~/.composer/vendor/bin:$PATH"' >> /home/$UBUNTU_USER/.profile
