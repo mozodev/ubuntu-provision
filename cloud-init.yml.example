@@ -39,12 +39,11 @@ runcmd:
 # DB:postgresql
 - curl -sSL https://git.io/JuU43 | bash
 
-# project
-- curl -sSL https://git.io/J8k2W | bash
-
 # APP:drupal
 - curl -sSL https://git.io/J3MKt | bash
 # APP:hugo
 - curl -sSL https://git.io/Jnt2g | bash
 # APP:rails
 - curl -sSL https://git.io/JuesX | bash
+# APP:rclone
+- curl -sSL https://git.io/JBh2E | bash
