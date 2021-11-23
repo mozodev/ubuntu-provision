@@ -4,7 +4,7 @@ if [ -f /root/.env ]; then
   export $(cat /root/.env | grep -v '#' | awk '/=/ {print $1}')
 fi
 
-MARIADB_VERSION=${MARIADB_VERSION:-10.5}
+MARIADB_VERSION=${MARIADB_VERSION:-10.6}
 MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-root}
 MYSQL_USER=${MYSQL_USER:-vagrant}
 MYSQL_USER_PASS=${MYSQL_USER_PASS:-vagrant}
@@ -23,7 +23,7 @@ export DEBIAN_FRONTEND=noninteractive
 echo "mariadb-server-$MARIADB_VERSION mysql-server/root_password password ${MYSQL_ROOT_PASSWORD}" | debconf-set-selections
 echo "mariadb-server-$MARIADB_VERSION mysql-server/root_password_again password ${MYSQL_ROOT_PASSWORD}" | debconf-set-selections
 apt-get install -y -qq mariadb-server
-mysql -uroot -pPASS -e "SET PASSWORD = PASSWORD('');"
+mysql -uroot -pPASS -e "SET PASSWORD = PASSWORD(${MYSQL_ROOT_PASSWORD});"
 
 echo "[mariadb] create user and database"
 mysql -e "CREATE DATABASE ${MYSQL_DATABASE} CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
