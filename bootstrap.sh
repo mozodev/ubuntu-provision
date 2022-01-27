@@ -10,7 +10,6 @@ if [ -f /root/.env ]; then
 fi
 
 UBUNTU_SWAP=${UBUNTU_SWAP:-1G}
-PROJECT_ENV=${PROJECT_ENV:-dev}
 
 echo "[bootstrap] ubuntu version"
 lsb_release -a
@@ -62,30 +61,21 @@ fi
 
 echo [bootstrap] add aliases.
 echo 'alias up="sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y"' >> /home/$UBUNTU_USER/.bash_aliases
-chown $UBUNTU_USER:$UBUNTU_USER /home/$UBUNTU_USER/.bash_aliases
 
 echo [bootstrap] ssh key, github
 ssh-keyscan github.com >> /home/$UBUNTU_USER/.ssh/known_hosts
-chown $UBUNTU_USER:$UBUNTU_USER /home/$UBUNTU_USER/.ssh/known_hosts
 if [ -f /root/.ssh/id_rsa ]; then
   cp /root/.ssh/id_rsa /home/$UBUNTU_USER/.ssh/
-  chmod 400 /home/$UBUNTU_USER/.ssh/id_rsa
-  echo 'eval "$(ssh-agent -s)"' >> /home/$UBUNTU_USER/.profile
-  echo 'ssh-add ~/.ssh/id_rsa' >> /home/$UBUNTU_USER/.profile
-  chown $UBUNTU_USER:$UBUNTU_USER /home/$UBUNTU_USER/.ssh/id_rsa /home/$UBUNTU_USER/.profile
+  cat << 'EOF' >> /home/$UBUNTU_USER/.bashrc
+
+  eval "$(ssh-agent -s)" && ssh-add ~/.ssh/id_rsa
+EOF
 fi
 
 echo [bootstrap] vscode
 echo 'defscrollback 10000' > /home/$UBUNTU_USER/.screenrc
-echo fs.inotify.max_user_watches=524288 | tee -a /etc/sysctl.conf && sudo sysctl -p
-
+echo fs.inotify.max_user_watches=524288 | tee -a /etc/sysctl.conf && sysctl -p
 cat << 'EOF' >> /home/$UBUNTU_USER/.bashrc
-alias up="sudo apt update && sudo apt -y --allow-downgrades upgrade && sudo apt -y autoremove"
-
-# User specific environment and startup programs
-if [ -f ~/.env ]; then
-  set -o allexport; source ~/.env; set +o allexport
-fi
 
 # vscode
 if [ -d ~/.vscode-server/bin ]; then
@@ -93,3 +83,5 @@ if [ -d ~/.vscode-server/bin ]; then
     export PATH=$PATH:$CODE_DIR/bin/
 fi
 EOF
+
+chown -R $UBUNTU_USER:$UBUNTU_USER /home/$UBUNTU_USER
