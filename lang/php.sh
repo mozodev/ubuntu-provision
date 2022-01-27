@@ -7,14 +7,27 @@ fi
 UBUNTU_USER=${UBUNTU_USER:-ubuntu}
 PHP_VERSION=${PHP_VERSION:-8.0}
 ALLOWED_PHP_VERSIONS=('5.6', '7.0','7.1', '7.2', '7.3', '7.4', '8.0')
+PHP_UPLOAD_MAX_SIZE=${PHP_UPLOAD_MAX_SIZE:-}
+PHP_UPLOAD_MAX_FILES=${PHP_UPLOAD_MAX_FILES:-}
 
 PROJECT_CODE=${PROJECT_CODE:-}
 PROJECT_ENV=${PROJECT_ENV:-}
 PROJECT_GITREPO=${PROJECT_GITREPO:-}
 PROJECT_ROOT=${PROJECT_ROOT:-}
+PROJECT_DB_EXTERNAL=${PROJECT_DB_EXTERNAL:-}
+ALLOWED_DBS=('mysql', 'mariadb', 'postgresql')
 
-PHP_UPLOAD_MAX_SIZE=${PHP_UPLOAD_MAX_SIZE:-}
-PHP_UPLOAD_MAX_FILES=${PHP_UPLOAD_MAX_FILES:-}
+if [ ! -z $PROJECT_DB_EXTERNAL ]; then
+  if [[ "${ALLOWED_DBS[*]}" =~ "$PROJECT_DB_EXTERNAL" ]]; then
+    if [ 'postgresql' == $PROJECT_DB_EXTERNAL ]; then
+      echo [php] install postgresql-client
+      sudo apt-get install -y postgresql-client
+    else
+      echo [php] install mysql-client
+      sudo apt-get install -y mysql-client
+    fi
+  fi
+fi
 
 if [[ "${ALLOWED_PHP_VERSIONS[*]}" =~ "$PHP_VERSION" ]]; then
   echo "[php] install php $PHP_VERSION, apache2"
