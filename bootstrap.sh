@@ -66,9 +66,7 @@ echo [bootstrap] ssh key, github
 ssh-keyscan github.com >> /home/$UBUNTU_USER/.ssh/known_hosts
 if [ -f /root/.ssh/id_rsa ]; then
   cp /root/.ssh/id_rsa /home/$UBUNTU_USER/.ssh/
-  cat << 'EOF' >> /home/$UBUNTU_USER/.bashrc
-
-  eval "$(ssh-agent -s)" && ssh-add ~/.ssh/id_rsa
+  chmod 400 /home/$UBUNTU_USER/.ssh/
 EOF
 fi
 
@@ -79,9 +77,13 @@ cat << 'EOF' >> /home/$UBUNTU_USER/.bashrc
 
 # vscode
 if [ -d ~/.vscode-server/bin ]; then
-    CODE_DIR=$(ls -td ~/.vscode-server/bin/*/ | head -1)
-    export PATH=$PATH:$CODE_DIR/bin/
+  CODE_DIR=$(ls -td ~/.vscode-server/bin/*/ | head -1)
+  export PATH=$PATH:$CODE_DIR/bin/
 fi
+EOF
+
+cat << 'EOF' >> /home/$UBUNTU_USER/.bash_profile
+source .bashrc
 EOF
 
 chown -R $UBUNTU_USER:$UBUNTU_USER /home/$UBUNTU_USER
