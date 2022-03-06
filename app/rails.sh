@@ -28,4 +28,9 @@ case $RAILS_DB in
 esac
 
 UBUNTU_USER=${UBUNTU_USER:-ubuntu}
-su - $UBUNTU_USER -c "gem install rails"
+RAILS_PRE="${RAILS_PRE:-false}"
+if [ "$RAILS_PRE" = true ]; then
+  su - $UBUNTU_USER -c "gem install rails --prerelease"
+else
+  su - $UBUNTU_USER -c "gem install rails"
+fi

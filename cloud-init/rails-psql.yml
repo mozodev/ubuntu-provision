@@ -6,7 +6,7 @@ ssh_import_id:
 runcmd:
   - |
     cat << 'EOF' >> /root/.env
-    RUBY_VERSION=2.7.4
+    RUBY_VERSION=3.0.3
     PSQL_USER=rails
     PSQL_USER_PASS=rails
     PSQL_DATABASE=rails
