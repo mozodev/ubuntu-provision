@@ -1,0 +1,16 @@
+[Unit]
+Description=Puma HTTP Server
+After=network.target
+
+[Service]
+Type=simple
+User=myuser
+WorkingDirectory=/path/to/my/rails-app
+Environment=RAILS_ENV=production
+
+ExecStart=/home/ubuntu/.rvm/wrappers/ruby-2.7.0/bundle -C /path/to/my/rails-app/config/puma/production.rb
+Restart=always
+KillMode=process
+
+[Install]
+WantedBy=multi-user.target
