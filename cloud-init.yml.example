@@ -16,7 +16,7 @@ write_files:
     PROJECT_ROOT=/var/www/kyeol-composer
     MYSQL_VERSION=5.7
 # private key
-- path: /root/.ssh/id_ras
+- path: /root/.ssh/id_rsa
   content: |
 
 runcmd:
