@@ -28,7 +28,7 @@ die() {
 args=("$@")
 [[ ${#args[@]} -eq 0 ]] && die "Missing script arguments: app name."
 
-allowed_apps=(hugo jq yq drupalorg benthos drush-launcher)
+allowed_apps=(hugo jq yq drupalorg benthos drush-launcher cloudflared)
 allowed_app_list=$(IFS=, ; echo "${allowed_apps[*]}")
 if ! [[ "${allowed_apps[*]}" =~ "$1" ]]; then
   echo "$1 is not avaliable. ($allowed_app_list)"
@@ -43,6 +43,7 @@ case "$1" in
   "drupalorg") gh_repo="mglaman/drupalorg-cli"; pattern="browser_download_url.*drupalorg.phar" ;;
   "benthos") gh_repo="Jeffail/benthos"; pattern="browser_download_url.*_linux_amd64.tar.gz" ;;
   "drush-launcher") gh_repo="drush-ops/drush-launcher"; pattern="browser_download_url.*drush.phar" ;;
+  "cloudflared") gh_repo="cloudflare/cloudflared"; pattern="browser_download_url.*cloudflared-linux-amd64" ;;
   *) gh_repo=""; pattern="" ;;
 esac
 
@@ -74,7 +75,7 @@ if [[ $url == *.tar.gz ]]; then
   # @TODO: CHANGELOG.md, LICENSE, README.md from benthos
   filename=$1
 else
-  eval "curl -sSL -O $url"
+  curl -sSL -O $url
   filename=$(basename $url)
 fi
 
