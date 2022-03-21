@@ -4,7 +4,7 @@ if [ -f /root/.env ]; then
   export $(cat /root/.env | grep -v '#' | awk '/=/ {print $1}')
 fi
 
-GO_VERSION=${GO_VERSION:-1.17.0}
+GO_VERSION=${GO_VERSION:-1.18.0}
 UBUNTU_USER=${UBUNTU_USER:-ubuntu}
 
 # https://github.com/syndbg/goenv/blob/master/INSTALL.md
