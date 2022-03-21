@@ -4,17 +4,16 @@ if [ -f /root/.env ]; then
   export $(cat /root/.env | grep -v '#' | awk '/=/ {print $1}')
 fi
 
-MARIADB_VERSION=${MARIADB_VERSION:-10.6}
+UBUNTU_USER=${UBUNTU_USER:-ubuntu}
+MARIADB_VERSION=${MARIADB_VERSION:-10.7}
 MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-root}
 MYSQL_USER=${MYSQL_USER:-vagrant}
 MYSQL_USER_PASS=${MYSQL_USER_PASS:-vagrant}
 MYSQL_DATABASE=${MYSQL_DATABASE:-vagrant}
 MYSQL_DATADIR=${MYSQL_DATADIR:-}
 MYSQL_INITDB=${MYSQL_INITDB:-/vagrant/dump/dev.sql.gz}
-UBUNTU_USER=${UBUNTU_USER:-ubuntu}
 
 echo "[mariadb] add $MARIADB_VERSION repository"
-apt-get install -y curl apt-transport-https
 curl -LsS https://downloads.mariadb.com/MariaDB/mariadb_repo_setup | bash
 apt-get update
 
