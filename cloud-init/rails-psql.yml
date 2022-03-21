@@ -1,18 +1,25 @@
 #cloud-config
 package_update: true
 package_upgrade: true
+
 ssh_import_id:
   - gh:mozodev
-runcmd:
-  - |
-    cat << 'EOF' >> /root/.env
+ssh_keys:
+  rsa_private: |
+    -----BEGIN RSA PRIVATE KEY-----
+    -----END RSA PRIVATE KEY-----
+
+write_files:
+- path: /root/.env
+  content: |
     RUBY_VERSION=3.0.3
     PSQL_USER=rails
     PSQL_USER_PASS=rails
     PSQL_DATABASE=rails
     RAILS_QUEUE=true
     RAILS_DB=postgresql
-    EOF
+
+runcmd:
   # bootstrap
   - curl -sSL https://git.io/J3yLS | bash
   # LANG:nodejs

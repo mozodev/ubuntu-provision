@@ -1,19 +1,26 @@
 #cloud-config
 package_update: true
 package_upgrade: true
+
 ssh_import_id:
-  - gh:mozodev
-runcmd:
-  - |
-    cat << 'EOF' >> /root/.env
+- gh:mozodev
+ssh_keys:
+  rsa_private: |
+    -----BEGIN RSA PRIVATE KEY-----
+    -----END RSA PRIVATE KEY-----
+
+write_files:
+- path: /root/.env
+  content: |
     GO_VERSION=1.17.0
     NODE_VERSION=16
-    EOF
-  # boostrap
-  - curl -sSL https://git.io/J3yLS | bash
-  # LANG:nodejs
-  - curl -sSL https://git.io/J3MoH | bash
-  # LANG:goenv
-  - curl -sSL https://git.io/JuMfR | bash
-  # APP:hugo
-  - curl -sSL https://git.io/Jnt2g | bash
+
+runcmd:
+# boostrap
+- curl -sSL https://git.io/J3yLS | bash
+# LANG:nodejs
+- curl -sSL https://git.io/J3MoH | bash
+# LANG:goenv
+- curl -sSL https://git.io/JuMfR | bash
+# APP:hugo
+- curl -sSL https://git.io/Jnt2g | bash

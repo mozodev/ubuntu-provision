@@ -1,12 +1,20 @@
 #cloud-config
+package_update: true
+package_upgrade: true
+
 ssh_import_id:
-  - gh:mozodev
+- gh:mozodev
+ssh_keys:
+  rsa_private: |
+    -----BEGIN RSA PRIVATE KEY-----
+    -----END RSA PRIVATE KEY-----
 
 write_files:
 - path: /root/.env
   content: |
-    PHP_VERSION=7.4
-    MYSQL_VERSION=8.0
+    PHP_VERSION=8.1
+    PHP_ENV=dev
+    MARIADB_VERSION=10.7
 
 runcmd:
 # bootstrap
@@ -17,3 +25,5 @@ runcmd:
 - curl -sSL https://git.io/J3MoH | bash
 # DB:mariadb
 - curl -sSL https://git.io/J3MKe | bash
+
+final_message: "The system is finally up, after $UPTIME seconds"
