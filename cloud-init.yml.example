@@ -44,3 +44,5 @@ runcmd:
 - curl -sSL https://git.io/JuesX | bash
 # APP:rclone
 - curl -sSL https://git.io/JBh2E | bash
+
+final_message: "The system is finally up, after $UPTIME seconds"
