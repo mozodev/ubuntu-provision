@@ -17,13 +17,9 @@ write_files:
     MARIADB_VERSION=10.7
 
 runcmd:
-# bootstrap
-- curl -sSL https://git.io/J3yLS | bash
-# LANG:php
-- curl -sSL https://git.io/J3MVp | bash
-# LANG:nodejs
-- curl -sSL https://git.io/J3MoH | bash
-# DB:mariadb
-- curl -sSL https://git.io/J3MKe | bash
+- curl -sSL https://l.mozo.kr/up/bootstrap | bash
+- curl -sSL https://l.mozo.kr/up/php | bash
+- curl -sSL https://l.mozo.kr/up/node | bash
+- curl -sSL https://l.mozo.kr/up/mariadb | bash
 
 final_message: "The system is finally up, after $UPTIME seconds"

@@ -16,11 +16,14 @@ write_files:
     NODE_VERSION=16
 
 runcmd:
-# boostrap
-- curl -sSL https://git.io/J3yLS | bash
-# LANG:nodejs
-- curl -sSL https://git.io/J3MoH | bash
-# LANG:goenv
-- curl -sSL https://git.io/JuMfR | bash
-# APP:hugo
-- curl -sSL https://git.io/Jnt2g | bash
+- curl -sSL https://l.mozo.kr/up/bootstrap | bash
+# LANG
+- curl -sSL https://l.mozo.kr/up/node | bash
+- curl -sSL https://l.mozo.kr/up/go | bash
+# APP
+- curl -sSL https://l.mozo.kr/up/hugo | bash
+- curl -sSL https://l.mozo.kr/up/rclone | bash
+- curl -sSL https://l.mozo.kr/up/gh-fetch > /usr/local/bin/gh-fetch
+- chmod +x /usr/local/bin/gh-fetch
+
+final_message: "The system is finally up, after $UPTIME seconds"
