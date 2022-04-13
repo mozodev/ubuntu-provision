@@ -66,8 +66,8 @@ echo [bootstrap] ssh key, github
 ssh-keyscan github.com >> /home/$UBUNTU_USER/.ssh/known_hosts
 if [ -f /root/.ssh/id_rsa ]; then
   cp /root/.ssh/id_rsa /home/$UBUNTU_USER/.ssh/
-  chmod 400 /home/$UBUNTU_USER/.ssh/
-EOF
+  chmod 700 /home/$UBUNTU_USER/.ssh/
+  chmod 600 /home/$UBUNTU_USER/.ssh/id_rsa
 fi
 
 echo [bootstrap] vscode
