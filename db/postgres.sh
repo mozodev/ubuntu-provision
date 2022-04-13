@@ -1,5 +1,4 @@
 #!/bin/bash
-set -e
 
 if [ -f /root/.env ]; then
   export $(cat /root/.env | grep -v '#' | awk '/=/ {print $1}')
@@ -10,13 +9,20 @@ PSQL_USER=${PSQL_USER:-ubuntu}
 PSQL_PASS=${PSQL_PASS:-ubuntu}
 PSQL_DBNAME=${PSQL_DBNAME:-ubuntu}
 PSQL_DUMP=${PSQL_DUMP:-}
+PSQL_LISTEN=${PSQL_LISTEN:-}
 
-echo "[postgres] start!"
+echo "[postgres] Installing..."
 if [[ $(apt-cache show postgresql | grep State) -eq 0 ]]; then
   apt-get update && apt-get install -y -qq postgresql-all
-  systemctl enable postgresql && systemctl start postgresql
+  systemctl enable postgresql
 fi
-echo "[postgres] Installed!"
+echo "[postgres] Install completed!"
+echo "[postgres] Set config..."
+if [ ! -z "$PSQL_LISTEN" ]; then
+su - postgres -c "tee /etc/postgresql/12/main/postgresql.conf > /dev/null" <<EOF
+listen_addresses = '$PSQL_LISTEN'
+EOF
+systemctl start postgresql
 
 if [ ! -z "$PSQL_DBNAME" ] && [ ! -z "$PSQL_USER" ]; then
   echo "[postgres] create user and database"
