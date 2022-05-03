@@ -20,10 +20,10 @@ fi
 RAILS_DB="${RAILS_DB:-mysql}"
 case $RAILS_DB in
   "mysql")
-    apt-get install -y libmysqlclient-dev
+    apt-get install -y libmysqlclient-dev mysql-client
     ;;
   "postgresql")
-    apt-get install -y libpq-dev
+    apt-get install -y libpq-dev postgresql-client
     ;;
 esac
 
