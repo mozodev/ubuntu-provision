@@ -22,7 +22,7 @@ if [ ! -z "$PSQL_LISTEN" ]; then
 su - postgres -c "tee /etc/postgresql/12/main/postgresql.conf > /dev/null" <<EOF
 listen_addresses = '$PSQL_LISTEN'
 EOF
-systemctl start postgresql
+fi
 
 if [ ! -z "$PSQL_DBNAME" ] && [ ! -z "$PSQL_USER" ]; then
   echo "[postgres] create user and database"
@@ -49,4 +49,5 @@ if [ ! -z "$PSQL_DUMP" ] && [ -f "$PSQL_DUMP" ]; then
   su - $UBUNTU_USER -c "pg_restore -d $PSQL_DBNAME $PSQL_DUMP"
 fi
 
-echo "[postgres] end!"
+systemctl start postgresql
+echo "[postgres] end and started!"
