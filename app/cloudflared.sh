@@ -2,8 +2,13 @@
 
 # check if ubuntu codename exists
 . /etc/os-release
-if [ -z "$VERSION_CODENAME" ]; then;
+if [ -z "$VERSION_CODENAME" ]; then
  exit -1
+fi
+
+CFL_BINARY=/usr/local/bin/cloudflared
+if [ -f "$CFL_BINARY" ]; then
+  sudo rm "$CFL_BINARY"
 fi
 
 # Add cloudflare gpg key
