@@ -15,12 +15,8 @@ echo "[bootstrap] ubuntu version"
 lsb_release -a
 
 echo "[bootstrap] house keeping"
-# https://github.com/cli/cli/blob/trunk/docs/install_linux.md
-curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | gpg --dearmor -o /usr/share/keyrings/githubcli-archive-keyring.gpg
-echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
-
 apt-get -y -qq update && apt-get -y -qq upgrade && apt-get -y -qq autoremove
-apt-get install -y -qq debconf-utils sqlite3 gh curl apt-transport-https
+apt-get install -y -qq debconf-utils sqlite3 curl apt-transport-https
 timedatectl set-timezone Asia/Seoul && date
 
 if [[ $(swapon -s | wc -l) -lt 1 ]]; then
