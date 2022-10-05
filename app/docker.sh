@@ -8,5 +8,4 @@ adduser $UBUNTU_USER docker
 systemctl restart docker
 
 docker version
-docker-compose version
-sudo usermod -a -G docker ubuntu
+docker compose version
