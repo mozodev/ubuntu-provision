@@ -4,9 +4,9 @@
 UBUNTU_USER=${UBUNTU_USER:ubuntu}
 
 curl -fsSL https://get.docker.com/ | sh
-groupadd docker
-usermod -aG docker $UBUNTU_USER
+adduser $UBUNTU_USER docker
 systemctl restart docker
 
 docker version
 docker-compose version
+sudo usermod -a -G docker ubuntu
