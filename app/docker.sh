@@ -1,10 +1,12 @@
 #!/bin/bash
+# https://gist.github.com/subfuzion/90e8498a26c206ae393b66804c032b79
 
-curl -fsSL https://get.docker.com | sh
-usermod -aG docker vagrant
+UBUNTU_USER=${UBUNTU_USER:ubuntu}
 
-curl -L "https://github.com/docker/compose/releases/download/1.28.6/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-chmod +x /usr/local/bin/docker-compose
+curl -fsSL https://get.docker.com/ | sh
+groupadd docker
+usermod -aG docker $UBUNTU_USER
+systemctl restart docker
 
 docker version
 docker-compose version
