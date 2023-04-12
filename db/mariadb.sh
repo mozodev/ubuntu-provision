@@ -21,7 +21,7 @@ echo "[mariadb] install $MARIADB_VERSION"
 export DEBIAN_FRONTEND=noninteractive
 echo "mariadb-server-$MARIADB_VERSION mysql-server/root_password password ${MYSQL_ROOT_PASSWORD}" | debconf-set-selections
 echo "mariadb-server-$MARIADB_VERSION mysql-server/root_password_again password ${MYSQL_ROOT_PASSWORD}" | debconf-set-selections
-apt-get install -y -qq mariadb-server
+apt-get install -y -qq mariadb-server mariadb-backup pigz
 mysql -uroot -pPASS -e "SET PASSWORD = PASSWORD(${MYSQL_ROOT_PASSWORD});"
 
 echo "[mariadb] create user and database"
