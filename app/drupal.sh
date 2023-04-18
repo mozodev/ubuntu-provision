@@ -11,7 +11,7 @@ PROJECT_ROOT=${PROJECT_ROOT:-}
 DRUPAL_DB_DRIVER=${DRUPAL_DB_DRIVER:-mysql}
 case "$DRUPAL_DB_DRIVER" in
   "sqlite") apt-get install -y -qq sqlite3 php-sqlite3 ;;
-  "mysql") apt-get install -y -qq mysql-client php-mysql ;;
+  "mysql") apt-get install -y -qq mariadb-client php-mysql ;;
   "pgsql") apt-get install -y -qq postgresql-client php-pgsql ;;
   *) echo "Unknown database for drupal: ${DRUPAL_DB_DRIVER}" ;;
 esac
