@@ -19,15 +19,12 @@ apt-get update
 
 echo "[mariadb] install $MARIADB_VERSION"
 export DEBIAN_FRONTEND=noninteractive
-echo "mariadb-server-$MARIADB_VERSION mysql-server/root_password password ${MYSQL_ROOT_PASSWORD}" | debconf-set-selections
-echo "mariadb-server-$MARIADB_VERSION mysql-server/root_password_again password ${MYSQL_ROOT_PASSWORD}" | debconf-set-selections
 apt-get install -y -qq mariadb-server mariadb-backup pigz
-mysql -uroot -pPASS -e "SET PASSWORD = PASSWORD(${MYSQL_ROOT_PASSWORD});"
 
 echo "[mariadb] create user and database"
-mysql -e "CREATE DATABASE ${MYSQL_DATABASE} CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
-mysql -e "CREATE USER ${MYSQL_USER}@'localhost' IDENTIFIED BY '${MYSQL_USER_PASS}';"
-mysql -e "GRANT ALL ON ${MYSQL_DATABASE}.* TO ${MYSQL_USER}@localhost; FLUSH PRIVILEGES;"
+mariadb -e "CREATE DATABASE ${MYSQL_DATABASE} CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+mariadb -e "CREATE USER ${MYSQL_USER}@'localhost' IDENTIFIED BY '${MYSQL_USER_PASS}';"
+mariadb -e "GRANT ALL ON ${MYSQL_DATABASE}.* TO ${MYSQL_USER}@localhost; FLUSH PRIVILEGES;"
 
 if [ ! -z "$MYSQL_DATADIR" ]; then
     # https://www.digitalocean.com/community/tutorials/how-to-move-a-mysql-data-directory-to-a-new-location-on-ubuntu-16-04

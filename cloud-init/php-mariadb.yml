@@ -14,7 +14,7 @@ write_files:
   content: |
     PHP_VERSION=8.1
     PHP_ENV=dev
-    MARIADB_VERSION=10.7
+    MARIADB_VERSION=11.2
 
 runcmd:
 - curl -sSL https://l.mozo.kr/up/bootstrap | bash
