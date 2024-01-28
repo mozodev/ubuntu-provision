@@ -6,7 +6,7 @@ UBUNTU_USER=${UBUNTU_USER:-ubuntu}
 PHP_VERSION=${PHP_VERSION:-8.1}
 PHP_ENV=${PHP_ENV:dev}
 
-ALLOWED_PHP_VERSIONS=('5.6', '7.0','7.1', '7.2', '7.3', '7.4', '8.0', '8.1')
+ALLOWED_PHP_VERSIONS=('5.6', '7.0','7.1', '7.2', '7.3', '7.4', '8.0', '8.1', '8.2', '8.3')
 if [[ "${ALLOWED_PHP_VERSIONS[*]}" =~ "$PHP_VERSION" ]]; then
   echo "[php] install php $PHP_VERSION, apache2"
   yes | add-apt-repository ppa:ondrej/php && apt-get update
