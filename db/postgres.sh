@@ -13,7 +13,7 @@ PSQL_LISTEN=${PSQL_LISTEN:-}
 
 echo "[postgres] Installing..."
 if [[ $(apt-cache show postgresql | grep State) -eq 0 ]]; then
-  apt-get update && apt-get install -y -qq postgresql-all
+  apt-get update && apt-get install -y -qq postgresql
   systemctl enable postgresql
 fi
 echo "[postgres] Install completed!"

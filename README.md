@@ -56,7 +56,7 @@ $ multipass launch -n project_name --cloud-init path/to/cloud-init.yml
 
 https://docs.j7k6.org/mount-qcow2-disk-image-linux/
 
-```bash
+```shell
 $ sudo apt -y install qemu-utils
 # $ IMG=/var/snap/multipass/common/data/multipassd/vault/instances/php7/ubuntu-20.04-server-cloudimg-amd64.img
 $ IMG=/var/snap/multipass/common/data/multipassd/vault/instances/mariadb/ubuntu-20.04-server-cloudimg-amd64.img
@@ -70,4 +70,14 @@ $ cp -r ./*  ~/php7/*
 
 $ sudo umount /home/mozo/mnt
 $ sudo qemu-nbd --disconnect /dev/nbd0
+```
+
+### lxc
+
+```shell
+lxc launch ubuntu:jammy rails --config=user.user-data="$(cat ./cloud-init/rails.yml)"
+# profile
+lxc profile create drupal
+lxc profile set drupal user.user-data - < cloud-init/drupal.yml
+lxc launch ubuntu:jammy drupal -p drupal
 ```

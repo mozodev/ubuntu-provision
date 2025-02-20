@@ -1,0 +1,23 @@
+#cloud-config
+package_update: true
+package_upgrade: true
+timezone: Asia/Seoul
+ssh_import_id:
+  - gh:mozodev
+write_files:
+- path: /root/.env
+  content: |
+    UBUNTU_SWAP=2G
+    PHP_VERSION=8.3
+    PHP_ENV=dev
+    MARIADB_VERSION=11.5
+    DRUPAL_DB_DRIVER=mysql
+runcmd:
+- cp /etc/ssh/ssh_host_rsa_key /root/.ssh/id_rsa
+- curl -sSL https://l.mozo.kr/up/bootstrap | bash
+- curl -sSL https://l.mozo.kr/up/php | bash
+- curl -sSL https://l.mozo.kr/up/mariadb | bash
+- curl -sSL https://l.mozo.kr/up/drupal | bash
+- curl -sSL https://l.mozo.kr/up/rclone | bash
+
+final_message: "The system is finally up, after $UPTIME seconds"
